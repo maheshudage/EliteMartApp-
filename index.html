@@ -1,9 +1,5 @@
-<%@ page contentType="text/html;charset=UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ include file="navbar.jsp"%>
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <title>Elite-Mart</title>
@@ -31,17 +27,7 @@
 	box-shadow: 0 0 0 2px #ffd814;
 }
 
-.add-cart-btn {
-	margin-left: 10px;
-	padding: 8px 14px;
-	border-radius: 8px;
-	border: none;
-	background: #ffd814;
-	font-size: 14px;
-	cursor: pointer;
-}
-
-a, a:visited, a:hover, a:active {
+a {
 	color: inherit;
 	text-decoration: none;
 }
@@ -49,113 +35,86 @@ a, a:visited, a:hover, a:active {
 </head>
 
 <body>
-	<br> ${msg}
-	<br>
 
-	<div class="container mt-4">
-		<!-- Products grid -->
-		<div class="row row-cols-1 row-cols-md-4 g-4">
+<br>
+<!-- Message placeholder -->
+<p id="msg"></p>
+<br>
 
-			<c:forEach var="product" items="${products}">
+<div class="container mt-4">
+	<div class="row row-cols-1 row-cols-md-4 g-4">
 
-				<c:if test="${product.active}">
-					<div class="col">
-						<div class="card h-100 shadow-sm">
+		<!-- PRODUCT CARD (repeat using JS) -->
+		<div class="col">
+			<div class="card h-100 shadow-sm">
 
-							<!-- Product Image -->
-							<a href="/products/${product.productId}"> <c:if
-									test="${not empty product.image}">
-									<img src="${product.image}" class="card-img-top"
-										alt="${product.name}" height="200">
-								</c:if> <c:if test="${empty product.image}">
-									<img src="/images/no-image.png" class="card-img-top"
-										alt="No Image" height="200">
-								</c:if>
-							</a>
+				<!-- Product Image -->
+				<a href="/products/1">
+					<img src="https://via.placeholder.com/300x200"
+						class="card-img-top" alt="Product Name" height="200">
+				</a>
 
-							<!-- CARD BODY MUST BE FLEX -->
-							<div class="card-body d-flex flex-column">
+				<div class="card-body d-flex flex-column">
 
-								<!-- PRODUCT DETAILS -->
-								<a href="/products/${product.productId}"
-									class="text-decoration-none text-dark">
-									<h6 class="card-title">${product.name}</h6>
-									<p class="card-text text-success fw-bold">₹
-										${product.price}</p> <c:choose>
-										<c:when test="${product.stock == 0}">
-											<p class="text-danger">Out of Stock</p>
-										</c:when>
-										<c:otherwise>
-											<p class="text-success">In Stock</p>
-											<p class="text-muted mb-2" style="font-size: 14px;">
-												<span class="text-success fw-bold">FREE delivery</span> by <strong>
-													<c:set var="deliveryDate"
-														value="<%=java.time.LocalDate.now().plusDays(3)%>" />
-													${deliveryDate}
-												</strong>
-											</p>
-										</c:otherwise>
-									</c:choose>
-								</a>
+					<!-- Product Details -->
+					<a href="/products/1" class="text-dark">
+						<h6 class="card-title">Product Name</h6>
+						<p class="card-text text-success fw-bold">₹ 999</p>
+						<p class="text-success">In Stock</p>
+						<p class="text-muted mb-2" style="font-size: 14px;">
+							<span class="text-success fw-bold">FREE delivery</span> by
+							<strong>20 Jan 2026</strong>
+						</p>
+					</a>
 
-								<!-- PUSH EVERYTHING BELOW TO BOTTOM -->
-								<div class="mt-auto">
+					<div class="mt-auto">
 
-									<!-- Quantity -->
-									<label class="qty-label">Quantity:</label> <select
-										class="qty-dropdown qtySelect w-100 mb-3">
-										<c:forEach var="q" begin="1" end="${product.stock}">
-											<option value="${q}">${q}</option>
-										</c:forEach>
-									</select>
+						<!-- Quantity -->
+						<label class="qty-label">Quantity:</label>
+						<select class="qty-dropdown qtySelect w-100 mb-3">
+							<option value="1">1</option>
+							<option value="2">2</option>
+							<option value="3">3</option>
+						</select>
 
-									<!-- Add to Cart -->
-									<form action="/cart/add/${product.productId}" method="post"
-										class="mb-2">
-										<input type="hidden" name="quantity" class="cartQty">
-										<button type="submit" class="btn btn-warning w-100"
-											<c:if test="${product.stock == 0}">disabled</c:if>>
-											Add to Cart</button>
-									</form>
+						<!-- Add to Cart -->
+						<form action="/cart/add/1" method="post" class="mb-2">
+							<input type="hidden" name="quantity" class="cartQty">
+							<button type="submit" class="btn btn-warning w-100">
+								Add to Cart
+							</button>
+						</form>
 
-									<!-- Buy Now -->
-									<form class="buyForm" data-product-id="${product.productId}"
-										method="post">
-										<button type="submit" class="btn btn-danger w-100"
-											<c:if test="${product.stock == 0}">disabled</c:if>>
-											Buy Now</button>
-									</form>
+						<!-- Buy Now -->
+						<form class="buyForm" data-product-id="1" method="post">
+							<button type="submit" class="btn btn-danger w-100">
+								Buy Now
+							</button>
+						</form>
 
-								</div>
-							</div>
-						</div>
 					</div>
-				</c:if>
-			</c:forEach>
-
+				</div>
+			</div>
 		</div>
+		<!-- END PRODUCT CARD -->
+
 	</div>
+</div>
 
-	<script>
-document.querySelectorAll('.qtySelect').forEach((select, index) => {
-    const cartForm = select.closest('.card-body').querySelector('form[action^="/cart/add"]');
-    const buyForm = select.closest('.card-body').querySelector('.buyForm');
-    const productId = buyForm.dataset.productId;
+<script>
+document.querySelectorAll('.qtySelect').forEach((select) => {
+	const card = select.closest('.card-body');
+	const cartForm = card.querySelector('form[action^="/cart/add"]');
+	const buyForm = card.querySelector('.buyForm');
+	const productId = buyForm.dataset.productId;
 
-    // Set initial Add to Cart hidden quantity
-    cartForm.querySelector('.cartQty').value = select.value;
+	cartForm.querySelector('.cartQty').value = select.value;
+	buyForm.action = "/order/buy/" + productId + "/" + select.value;
 
-    // Update both Add to Cart hidden input and Buy Now PathVariable
-    select.addEventListener('change', function() {
-        // Update Add to Cart quantity
-        cartForm.querySelector('.cartQty').value = this.value;
-
-        // Update Buy Now URL with selected quantity
-        buyForm.action = "/order/buy/" + productId + "/" + this.value;
-    });
-
-    // Initialize Buy Now action on page load
-    buyForm.action = "/order/buy/" + productId + "/" + select.value;
+	select.addEventListener('change', function () {
+		cartForm.querySelector('.cartQty').value = this.value;
+		buyForm.action = "/order/buy/" + productId + "/" + this.value;
+	});
 });
 </script>
 
