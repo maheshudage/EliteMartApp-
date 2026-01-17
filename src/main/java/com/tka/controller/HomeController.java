@@ -12,5 +12,11 @@ public class HomeController {
     public String home() {
         return "OK";
     }
+    @GetMapping("/health")
+    public String health() {
+        return "OK";
+    }
 }
+}
+
 
